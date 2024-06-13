@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>PingIt!</title>
+</head>
+<body id="parent-container">
+    <nav class="bg-gray-700 h-20 flex">
+        <h1 class="text-5xl text-white ml-5">PingIt!</h1>
+        <h4 class="text-white text-2xl ml-80 mt-5">Test the status of any computer or local network!</h4>
+    </nav>
+    <div class="flex">
+        <div>
+            <h5 class="text-3xl mt-10 ml-5">Test the Status of any computer or website once..</h5>
+            <input type="text" placeholder="Enter IP address" class="mt-5 w-80 border-2 border-black ml-5" id="url"/><br>
+            <button class="bg-yellow-500 ml-5 w-80 font-mono border-2 border-gray-700 mt-2" onclick="pingonce()">Test</button>
+            <div class="flex ml-5">
+                <p class="text-red-600">Status:</p>
+                <p id="status"></p>
+            </div>
+        </div>
+        <div class="mt-20 ml-40 h-40">
+            <i class="fa-solid fa-wifi fa-2xl"></i>
+        </div>
+    </div>
+    <button onclick="gett()" class="bg-yellow-500 border-2 border-black ml-5 font-mono">Obtain saved IP addresses from database</button>
+    
+    
+
+    <script>
+        async function pingonce() {
+            const url = document.getElementById("url").value;
+            const statusElement = document.getElementById("status");
+
+            
+                const response = await fetch('http://localhost:3003/ping', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const data= await response.json();
+                console.log(data);
+                statusElement.innerText=data.status;
+
+
+            }
+             function gett(){
+                const response=fetch('http://localhost:3003/')
+                .then(response=>response.json())
+                .then(data=>{
+                    console.log(data);
+                    const parentElement = document.getElementById("parent-container"); 
+
+
+
+// Loop through each data entry
+for (const entry of data) {
+  // Create a new div element
+  const newDiv = document.createElement("div");
+
+  
+
+  
+  newDiv.innerHTML = `<h3 style="margin-left:5px;">${entry.url}</h3>`
+
+  // Append the new div to the parent element
+  parentElement.appendChild(newDiv);
+}
+                });
+
+            }
+            
+
+
+
+            
+        
+    </script>
+</body>
+</html>
